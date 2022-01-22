@@ -1,0 +1,31 @@
+version: "3"
+services:
+  server-container:
+    image: 'lavanderia/dkr-multicontainer-app-server'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    links:
+      - database_container
+    depends_on:
+      - database_container
+    restart: on-failure
+    ports:
+      - 8080:8080
+  database-container:
+    build:
+      context: .
+      dockerfile: Dockerfile-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=safira
+      - POSTGRES_DB=Lavanderia
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    labels:
+      kompose.service.type: LoadBalancer
+volumes:
+  pg-data: {}
+

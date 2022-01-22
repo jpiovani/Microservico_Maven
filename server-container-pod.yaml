@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: server-container
+  name: server-container
+spec:
+  containers:
+    - image: lavanderia/dkr-multicontainer-app-server
+      name: server-container
+      ports:
+        - containerPort: 8080
+      resources: {}
+  restartPolicy: OnFailure
+status: {}

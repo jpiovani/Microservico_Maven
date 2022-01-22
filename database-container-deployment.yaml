@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.service.type: LoadBalancer
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: database-container
+  name: database-container
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: database-container
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.service.type: LoadBalancer
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: database-container
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: Lavanderia
+            - name: POSTGRES_PASSWORD
+              value: safira
+            - name: POSTGRES_USER
+              value: postgres
+          image: database-container
+          name: database-container
+          ports:
+            - containerPort: 5432
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pg-data
+      restartPolicy: Always
+      volumes:
+        - name: pg-data
+          persistentVolumeClaim:
+            claimName: pg-data
+status: {}
